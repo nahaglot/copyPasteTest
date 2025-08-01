@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Text kopieren</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 50px;
+    }
+    textarea {
+      width: 100%;
+      height: 300px;
+      padding: 10px;
+      font-size: 16px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Text kopieren</h1>
+  <textarea id="myTextarea" placeholder="Gib deinen Text ein"></textarea>
+  <br>
+  <button onclick="copyToClipboard()">Kopieren</button>
+
+  <script>
+    // Funktion: Lese den Text aus URL-Parameter "text"
+    function getURLParameter(name) {
+      const params = new URLSearchParams(window.location.search);
+      return params.get(name);
+    }
+
+    // Fülle das Textfeld, wenn ein Parameter vorhanden ist
+    window.onload = function() {
+      const paramText = getURLParameter("text");
+      if (paramText) {
+        document.getElementById("myTextarea").value = decodeURIComponent(paramText);
+      }
+    };
+
+    function copyToClipboard() {
+      const textarea = document.getElementById("myTextarea");
+      const text = textarea.value;
+
+      if (!text) {
+        alert("Bitte gib einen Text ein!");
+        return;
+      }
+
+      navigator.clipboard.writeText(text).then(() => {
+        alert("Text wurde in die Zwischenablage kopiert!");
+      }).catch(err => {
+        alert("Fehler beim Kopieren: " + err);
+      });
+    }
+  </script>
+
+</body>
+</html>
