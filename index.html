@@ -2,32 +2,27 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Text kopieren</title>
+  <title>Text wird kopiert</title>
 </head>
 <body>
-
-  <textarea id="myTextarea" readonly>Hallo Welt!</textarea>
-  <br>
-  <button onclick="copyToClipboard()">Text kopieren</button>
-
   <script>
-  function fallbackCopy(text) {
-    const textarea = document.createElement("textarea");
-    textarea.value = text;
-    textarea.setAttribute("readonly", "");
-    textarea.style.position = "absolute";
-    textarea.style.left = "-9999px";
-    document.body.appendChild(textarea);
-    textarea.select();
-    try {
-      document.execCommand("copy");
-      console.log("Text erfolgreich kopiert!");
-    } catch (err) {
-      console.error("Fallback-Fehler:", err);
+    function getURLParameter(name) {
+      return new URLSearchParams(window.location.search).get(name);
     }
-    document.body.removeChild(textarea);
-  }
-</script>
 
+    const text = decodeURIComponent(getURLParameter("text") || "");
+
+    if (text) {
+      navigator.clipboard.writeText(text).then(() => {
+        console.log("Text kopiert.");
+        window.close(); // Schließt sich selbst
+      }).catch(err => {
+        console.error("Fehler beim Kopieren:", err);
+      });
+    } else {
+      console.warn("Kein Text vorhanden.");
+      window.close();
+    }
+  </script>
 </body>
 </html>
