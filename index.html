@@ -2,27 +2,103 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Text wird kopiert</title>
+  <title>Tabelle transformieren</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f6f6f6;
+      padding: 40px;
+    }
+
+    .container {
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      padding: 20px 24px;
+      max-width: 900px;
+      position: relative;
+    }
+
+    .copy-icon {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 24px;
+      height: 24px;
+      background-image: url('data:image/svg+xml;utf8,<svg fill="%23000" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1z"/><path d="M20 5H8a2 2 0 0 0-2 2v16h16V7a2 2 0 0 0-2-2zm0 18H8V7h12v16z"/></svg>');
+      background-repeat: no-repeat;
+      background-size: contain;
+      cursor: pointer;
+    }
+
+    ul {
+      margin-top: 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 15px;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 8px 6px;
+    }
+
+    th {
+      font-weight: bold;
+    }
+
+    .bold {
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
-  <script>
-    function getURLParameter(name) {
-      return new URLSearchParams(window.location.search).get(name);
-    }
 
-    const text = decodeURIComponent(getURLParameter("text") || "");
+  <div class="container">
+    <div class="copy-icon" title="Kopieren"></div>
 
-    if (text) {
-      navigator.clipboard.writeText(text).then(() => {
-        console.log("Text kopiert.");
-        window.close(); // Schließt sich selbst
-      }).catch(err => {
-        console.error("Fehler beim Kopieren:", err);
-      });
-    } else {
-      console.warn("Kein Text vorhanden.");
-      window.close();
-    }
-  </script>
+    <p>Transformiere die Tabelle wie folgt:</p>
+    <ul>
+      <li>Die Spalten <span class="bold">"Unternehmen"</span>, <span class="bold">"Kategorie"</span> und <span class="bold">"Kennzahl"</span> und ihre Werte bleiben bestehen.</li>
+      <li>Die Spalten [Datum] - FTE, [Datum] - Köpfe und zugehörige Werte werden in zugehörige Zeilen umgewandelt.</li>
+      <li>Vorgabe Tabellenstruktur:</li>
+    </ul>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Datum</th>
+          <th>Unternehmen</th>
+          <th>Kategorie</th>
+          <th>Kennzahl</th>
+          <th>Einheit</th>
+          <th>Wert</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>31.12.2018</td>
+          <td>adesso SE</td>
+          <td>Zusammenfassung Mitarbeitende nach Status feste Mitarbeitende</td>
+          <td>FTE</td>
+          <td>1601,4</td>
+        </tr>
+        <tr>
+          <td>31.12.2018</td>
+          <td>adesso SE</td>
+          <td>Zusammenfassung Mitarbeitende nach Status feste Mitarbeitende</td>
+          <td>Köpfe</td>
+          <td>1627</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>Speichere die neue Datei unter folgendem Name: <span class="bold">[Dateiname]_Transformed.xlsx</span></p>
+  </div>
+
 </body>
 </html>
