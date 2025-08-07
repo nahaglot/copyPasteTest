@@ -2,44 +2,25 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Text wird kopiert...</title>
+  <title>Text kopieren</title>
 </head>
 <body>
-  <textarea id="myTextarea" style="display:none;" readonly></textarea>
-  <button id="copyBtn" style="display:none;"></button>
+
+  <textarea id="myTextarea" readonly>Hallo Welt!</textarea>
+  <br>
+  <button onclick="copyToClipboard()">Text kopieren</button>
 
   <script>
-    function getURLParameter(name) {
-      const params = new URLSearchParams(window.location.search);
-      return params.get(name);
-    }
-
-    async function copyAndClose() {
-      const paramText = getURLParameter("text");
-      const decodedText = paramText ? decodeURIComponent(paramText) : "";
-      const textarea = document.getElementById("myTextarea");
-      textarea.value = decodedText;
-
-      if (!decodedText) {
-        console.warn("Kein Text zum Kopieren vorhanden.");
-        return;
-      }
-
-      try {
-        await navigator.clipboard.writeText(decodedText);
-        console.log("Text erfolgreich kopiert.");
-        window.close(); // Funktioniert nur bei scriptgeöffnetem Fenster
-      } catch (err) {
+    function copyToClipboard() {
+      const text = document.getElementById("myTextarea").value;
+      
+      navigator.clipboard.writeText(text).then(() => {
+        console.log("Text erfolgreich kopiert!");
+      }).catch(err => {
         console.error("Fehler beim Kopieren:", err);
-      }
+      });
     }
-
-    // Automatisch "klicken", um Benutzerinteraktion zu simulieren
-    window.onload = function () {
-      const copyBtn = document.getElementById("copyBtn");
-      copyBtn.addEventListener('click', copyAndClose);
-      copyBtn.click(); // simulierter Klick
-    };
   </script>
+
 </body>
 </html>
