@@ -54,12 +54,37 @@
     .bold {
       font-weight: bold;
     }
+
+    .hidden-copy-text {
+      position: absolute;
+      left: -9999px;
+      white-space: pre;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #4caf50;
+      color: #fff;
+      padding: 10px 16px;
+      border-radius: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      font-size: 14px;
+      z-index: 999;
+    }
+
+    .toast.show {
+      opacity: 1;
+    }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <div class="copy-icon" title="Kopieren"></div>
+  <div class="container" id="copyArea">
+    <div class="copy-icon" title="Text kopieren" onclick="copyContent()"></div>
 
     <p>Transformiere die Tabelle wie folgt:</p>
     <ul>
@@ -99,6 +124,42 @@
 
     <p>Speichere die neue Datei unter folgendem Name: <span class="bold">[Dateiname]_Transformed.xlsx</span></p>
   </div>
+
+  <!-- Hidden Textarea for Copying -->
+  <textarea id="copyText" class="hidden-copy-text" readonly></textarea>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast">Text wurde in die Zwischenablage kopiert</div>
+
+  <script>
+    function copyContent() {
+      const container = document.getElementById("copyArea");
+
+      // Extrahiere nur den Text-Inhalt
+      const text = container.innerText;
+
+      // Fülle verstecktes Textfeld
+      const hiddenTextarea = document.getElementById("copyText");
+      hiddenTextarea.value = text;
+      hiddenTextarea.select();
+      hiddenTextarea.setSelectionRange(0, 99999); // Für mobile Geräte
+
+      // Versuche zu kopieren
+      try {
+        const successful = document.execCommand("copy");
+        if (successful) showToast();
+        else alert("Kopieren fehlgeschlagen");
+      } catch (err) {
+        alert("Fehler beim Kopieren: " + err);
+      }
+    }
+
+    function showToast() {
+      const toast = document.getElementById("toast");
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 2500);
+    }
+  </script>
 
 </body>
 </html>
