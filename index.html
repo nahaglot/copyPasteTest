@@ -11,16 +11,23 @@
   <button onclick="copyToClipboard()">Text kopieren</button>
 
   <script>
-    function copyToClipboard() {
-      const text = document.getElementById("myTextarea").value;
-      
-      navigator.clipboard.writeText(text).then(() => {
-        console.log("Text erfolgreich kopiert!");
-      }).catch(err => {
-        console.error("Fehler beim Kopieren:", err);
-      });
+  function fallbackCopy(text) {
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    textarea.setAttribute("readonly", "");
+    textarea.style.position = "absolute";
+    textarea.style.left = "-9999px";
+    document.body.appendChild(textarea);
+    textarea.select();
+    try {
+      document.execCommand("copy");
+      console.log("Text erfolgreich kopiert!");
+    } catch (err) {
+      console.error("Fallback-Fehler:", err);
     }
-  </script>
+    document.body.removeChild(textarea);
+  }
+</script>
 
 </body>
 </html>
