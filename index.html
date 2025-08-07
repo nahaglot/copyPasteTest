@@ -6,6 +6,7 @@
 </head>
 <body>
   <textarea id="myTextarea" style="display:none;" readonly></textarea>
+  <button id="copyBtn" style="display:none;"></button>
 
   <script>
     function getURLParameter(name) {
@@ -13,10 +14,9 @@
       return params.get(name);
     }
 
-    window.onload = function () {
+    async function copyAndClose() {
       const paramText = getURLParameter("text");
       const decodedText = paramText ? decodeURIComponent(paramText) : "";
-
       const textarea = document.getElementById("myTextarea");
       textarea.value = decodedText;
 
@@ -25,13 +25,20 @@
         return;
       }
 
-      // Versuche, in die Zwischenablage zu kopieren
-      navigator.clipboard.writeText(decodedText).then(() => {
+      try {
+        await navigator.clipboard.writeText(decodedText);
         console.log("Text erfolgreich kopiert.");
-        window.close(); // Versuche das Fenster zu schließen
-      }).catch(err => {
+        window.close(); // Funktioniert nur bei scriptgeöffnetem Fenster
+      } catch (err) {
         console.error("Fehler beim Kopieren:", err);
-      });
+      }
+    }
+
+    // Automatisch "klicken", um Benutzerinteraktion zu simulieren
+    window.onload = function () {
+      const copyBtn = document.getElementById("copyBtn");
+      copyBtn.addEventListener('click', copyAndClose);
+      copyBtn.click(); // simulierter Klick
     };
   </script>
 </body>
